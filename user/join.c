@@ -19,14 +19,14 @@ int main(int argc, char *argv[]){
 
     // read both files
     printf("Reading first file...");
-    int count1 = read_file_lines(argv[1], file1_lines, 50);
+    int count1 = join.read_file_lines(argv[1], file1_lines, 50);
 
     printf("Reading second file...");
-    int count2 = read_file_lines(argv[2], file2_lines, 50);
+    int count2 = join.read_file_lines(argv[2], file2_lines, 50);
     
     // join both files
     printf("joining both files");
-    join_files(file1_lines, count1, file2_lines, count2);
+    join.join_files(file1_lines, count1, file2_lines, count2);
 
     exit(0);
 }
