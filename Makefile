@@ -144,8 +144,8 @@ UPROGS=\
 	$U/_dorphan\
 	$U/_join\
 
-fs.img: mkfs/mkfs README.md $(UPROGS)
-	mkfs/mkfs fs.img README.md $(UPROGS)
+fs.img: mkfs/mkfs README.md $(UPROGS) file1.txt file2.txt
+	mkfs/mkfs fs.img README.md $(UPROGS) file1.txt file2.txt
 
 -include kernel/*.d user/*.d
 
