@@ -171,6 +171,7 @@
          * If the fields match then print joined line
         */
         void join_files(char file1_lines[][256], int count1, char file2_lines[][256], int count2){
+        	int matches_found = 0;
     
             // iterate through each line from file 1 
             for (int i =0; i< count1; i++){
@@ -209,6 +210,8 @@
 
                 // check if both words are equal returns 0 if true
                 if(compare_strings(field1, field2) == 0){
+                	matches_found++;
+                
                     // get rest of lines for both files from where we got field
                     char* rest1 = get_rest_of_line(file1_lines[i]);
                     char* rest2 = get_rest_of_line(file2_lines[j]);
@@ -218,17 +221,19 @@
 
                 }
             }
+            
+    }
+    if(matches_found == 0){
+    	printf("No matches found\n");
     }
 }
 
 int main(int argc, char *argv[]){
     // ensure correct usage of command line args
-    printf("DEBUG: starting join...\n");
     if (argc != 3){
         printf("Usage: join file1.txt file2.txt\n");
         exit(1);
     }
-    printf("DEBUG: Args okay, reading files\n");
 
     printf("Joining files '%s' and '%s'...\n", argv[1], argv[2]);
 
