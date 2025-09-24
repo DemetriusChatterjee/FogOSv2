@@ -1,0 +1,25 @@
+Alice Engineering Dept Robotics
+Bob Physics Dept Quantum Studies
+Charlie Chemistry Dept Polymers
+Diana Math Dept Applied Modeling
+Ethan Biology Dept Genetics Focus
+Fiona Economics Dept Global Trade
+George Literature Dept Classics
+Hannah History Dept Ancient World
+Ian Philosophy Dept Ethics
+Julia Music Dept Composition
+Kevin Art Dept Modern Painting
+Laura CS Dept Machine Learning
+Mark Stats Dept Data Analysis
+Nina Linguistics Dept Semantics
+Oliver Sociology Dept Inequality
+Paula Psychology Dept Cognition
+Quinn Anthropology Dept Culture
+Rachel Astronomy Dept Cosmology
+Steve PoliSci Dept Governance
+Tina EnvSci Dept Climate Studies
+Uma Business Dept Marketing
+Victor Education Dept Pedagogy
+Wendy Geography Dept GIS Mapping
+Xavier Law Dept International
+Yara Medicine Dept Physiology
