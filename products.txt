@@ -1,0 +1,5 @@
+P001 Laptop Electronics Computing
+P002 Phone Mobile Communications
+P003 Tablet Portable Media
+P004 Watch Wearable Tech
+P005 Headphones Audio Sound

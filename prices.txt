@@ -1,0 +1,5 @@
+P001 $999 Premium High
+P003 $599 Mid Reasonable
+P004 $299 Budget Low
+P007 $199 Clearance Sale
+P008 $149 Discount Special

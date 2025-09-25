@@ -1,0 +1,5 @@
+001 A+ Excellent Outstanding
+002 B+ Good Solid
+003 A- Very Strong
+005 B Fair Average
+006 C Below Standard

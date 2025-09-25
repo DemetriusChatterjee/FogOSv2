@@ -166,14 +166,17 @@
         void print_joined_line(int output_file, char* field, char* rest1, char* rest2){
             printf("%s %s %s\n", field, rest1, rest2);
 
-            // Write to the file
-            write(output_file, field, strlen(field));
-            write(output_file, " ", 1);
-            write(output_file, rest1, strlen(rest1));
-            write(output_file, " ", 1);
-            write(output_file, rest2, strlen(rest2));
-            write(output_file, "\n", 1);
+			// check if there is a valid file descriptor
+			if (output_file >= 0){
+            	// Write to the file 
+           		write(output_file, field, strlen(field));
+           		write(output_file, " ", 1);
+            	write(output_file, rest1, strlen(rest1));
+            	write(output_file, " ", 1);
+            	write(output_file, rest2, strlen(rest2));
+            	write(output_file, "\n", 1);
         }
+      }
     
     /**
      * Compares lines from both files and looks for matches in the 
@@ -182,12 +185,16 @@
     */
     void join_files(char file1_lines[][256], int count1, char file2_lines[][256], int count2, const char* output_file){
         int matches_found = 0;
+        int output_fd = -1;
 
         // Open the output file for writing (create it if it doesn't exist)
-        int output_fd = open(output_file, O_CREATE | O_RDWR);
+        if(output_file != 0){
+        	
+        output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC);
         if (output_fd < 0) {
             printf("Error: Cannot open output file '%s'\n", output_file);
             return;
+            }
         }
 
         // iterate through each line from file 1 
@@ -246,14 +253,19 @@
     }
 
 int main(int argc, char *argv[]){
+	// no output file before join
+	char* output_file = 0; 
     // ensure correct usage of command line args
-    if (argc != 3){
-        printf("Usage: join file1.txt file2.txt\n");
+    if (argc == 4){
+    	output_file = argv[3];
+    	printf("Joining files '%s' and '%s' -> output to '%s'...\n", argv[1], argv[2], argv[3]);
+	}else if (argc == 3){
+		printf("Joining files '%s' and '%s'...\n", argv[1], argv[2]);
+	}
+    else{
+        printf("Usage: join file1.txt file2.txt [outputfile.txt]\n");
         exit(1);
     }
-
-    printf("Joining files '%s' and '%s'...\n", argv[1], argv[2]);
-
 
     // read both files
     printf("Reading first file...");
@@ -273,8 +285,12 @@ int main(int argc, char *argv[]){
     }
     // join both files
     printf("joining both files\n");
-    join_files(file1_lines, count1, file2_lines, count2, "joined.txt");
-    printf("saving in a new file called joined.txt\n");
+    
+    join_files(file1_lines, count1, file2_lines, count2, output_file);
+    if(output_file != 0){
+    	printf("Output saved to %s\n", output_file);
+    }
+    
     printf("join completed\n");
 
     exit(0);
