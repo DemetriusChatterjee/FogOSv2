@@ -184,13 +184,14 @@
      * If the fields match then print joined line
     */
     void join_files(char file1_lines[][256], int count1, char file2_lines[][256], int count2, const char* output_file){
-        int matches_found = 0;
-        int output_fd = -1;
+        int matches_found = 0; 		// count for amount of matches found
+        int output_fd = -1;			// value of file descriptor of output file (-1 no valid file)
 
         // Open the output file for writing (create it if it doesn't exist)
         if(output_file != 0){
-        	
-        output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC);
+        // changes the value of output_fd to indicate we have a valid file
+        output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC); 	// open file with flags (create new file if it does not exist | 
+        														      	//	write access only | empty file if already exists)
         if (output_fd < 0) {
             printf("Error: Cannot open output file '%s'\n", output_file);
             return;
@@ -201,6 +202,8 @@
         for (int i =0; i< count1; i++){
             char line1_copy[256]; // make copy to avoid messing with original
             int k = 0;
+
+            // string copy
             while (k<255 && file1_lines[i][k] != '\0'){
                 line1_copy[k] = file1_lines[i][k];
                 k++;
@@ -219,6 +222,8 @@
             for (int j =0; j < count2; j++){
                 char line2_copy[256]; // make copy to avoid messing with original
                 int m = 0;
+
+                // string copy
                 while (m<255 && file2_lines[j][m] != '\0'){
                     line2_copy[m] = file2_lines[j][m];
                     m++;
@@ -230,7 +235,7 @@
                 if(field2 == 0){
                     continue;
                 }
-                terminate_first_field(field2);
+                terminate_first_field(field2); // get rid of first word to make comparing easier
 
                 // check if both words are equal returns 0 if true
                 if(compare_strings(field1, field2) == 0){
@@ -240,11 +245,13 @@
                     char* rest1 = get_rest_of_line(file1_lines[i]);
                     char* rest2 = get_rest_of_line(file2_lines[j]);
 
+					// print using format
                     print_joined_line(output_fd, field1, rest1, rest2);
 
                 }
             }                
         }
+        // print message if no matches were found
         if(matches_found == 0){
             printf("No matches found\n");
         }
@@ -285,7 +292,7 @@ int main(int argc, char *argv[]){
     }
     // join both files
     printf("joining both files\n");
-    
+    // call function that joins files into output file
     join_files(file1_lines, count1, file2_lines, count2, output_file);
     if(output_file != 0){
     	printf("Output saved to %s\n", output_file);
