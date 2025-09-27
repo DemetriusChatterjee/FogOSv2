@@ -288,7 +288,7 @@ int main(int argc, char *argv[]) {
     // read both files
     printf("Reading first file...");
     int count1 = read_file_lines(argv[1], file1_lines, 50);
-    printf("Read %d lines from file1\n", count1);
+    printf("Read %d lines from file 1\n", count1);
     if(count1 == 0) {
     	printf("ERROR: failed to read lines from %s\n", argv[1]);
     	exit(1);
@@ -304,7 +304,7 @@ int main(int argc, char *argv[]) {
     
     printf("Reading second file...");
     int count2 = read_file_lines(argv[2], file2_lines, 50);
-    printf("Read %d lines from file2\n", count2);
+    printf("Read %d lines from file 2\n", count2);
     if(count2 == 0) {
     	printf("ERROR: failed to read lines from %s\n", argv[2]);
     	exit(1);
