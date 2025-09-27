@@ -111,9 +111,21 @@
      */
     int read_file_lines(char* filename, char lines[][256], int max_count) {
         int file = open(filename, 0); // 0 = O_RDONLY
+        struct stat st; // stat struct contains a member called size, which holds the file's size in bytes
+        
         if (file < 0) {
-            printf("Error: Cannot open file '%s'\n", filename);
+            close(file);
             return 0;
+        }
+
+        if (fstat(file, &st) < 0) { //check metadata
+            close(file);
+            return -1;
+        }
+
+        if (st.size == 0) { //check size to see if empty txt or not, join does not work if any or both files empty
+            close(file);
+            return -2;
         }
         
         int line_count = 0;
@@ -163,11 +175,11 @@
          * function prints joined line 
          * "first word" "rest line file 1" "rest line file 2"
         */
-        void print_joined_line(int output_file, char* field, char* rest1, char* rest2){
+        void print_joined_line(int output_file, char* field, char* rest1, char* rest2) {
             printf("%s %s %s\n", field, rest1, rest2);
 
 			// check if there is a valid file descriptor
-			if (output_file >= 0){
+			if (output_file >= 0) {
             	// Write to the file 
            		write(output_file, field, strlen(field));
            		write(output_file, " ", 1);
@@ -183,12 +195,12 @@
      * first field
      * If the fields match then print joined line
     */
-    void join_files(char file1_lines[][256], int count1, char file2_lines[][256], int count2, const char* output_file){
+    void join_files(char file1_lines[][256], int count1, char file2_lines[][256], int count2, const char* output_file) {
         int matches_found = 0; 		// count for amount of matches found
         int output_fd = -1;			// value of file descriptor of output file (-1 no valid file)
 
         // Open the output file for writing (create it if it doesn't exist)
-        if(output_file != 0){
+        if(output_file != 0) {
             // changes the value of output_fd to indicate we have a valid file
             output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC); 	// open file with flags (create new file if it does not exist | 
             														      	//	write access only | empty file if already exists)
@@ -199,12 +211,12 @@
         }
 
         // iterate through each line from file 1 
-        for (int i =0; i< count1; i++){
+        for (int i =0; i< count1; i++) {
             char line1_copy[256]; // make copy to avoid messing with original
             int k = 0;
 
             // string copy
-            while (k<255 && file1_lines[i][k] != '\0'){
+            while (k<255 && file1_lines[i][k] != '\0') {
                 line1_copy[k] = file1_lines[i][k];
                 k++;
             }
@@ -212,19 +224,19 @@
             
             char* field1 = get_first_field(line1_copy); // reads full line but only gets first word to check for match
             // skip is field is empty 
-            if(field1 == 0){
+            if(field1 == 0) {
                 continue;
             }
 
             terminate_first_field(field1); // get rid of first word to make comparing easier
 
             // iterate through lines in file two 
-            for (int j =0; j < count2; j++){
+            for (int j =0; j < count2; j++) {
                 char line2_copy[256]; // make copy to avoid messing with original
                 int m = 0;
 
                 // string copy
-                while (m<255 && file2_lines[j][m] != '\0'){
+                while (m<255 && file2_lines[j][m] != '\0') {
                     line2_copy[m] = file2_lines[j][m];
                     m++;
                 }
@@ -232,13 +244,13 @@
                             
                 char* field2 = get_first_field(line2_copy); // read full line but only gets first word
                 // skip if field is empty
-                if(field2 == 0){
+                if(field2 == 0) {
                     continue;
                 }
                 terminate_first_field(field2); // get rid of first word to make comparing easier
 
                 // check if both words are equal returns 0 if true
-                if(compare_strings(field1, field2) == 0){
+                if(compare_strings(field1, field2) == 0) {
                     matches_found++;
                 
                     // get rest of lines for both files from where we got field
@@ -252,23 +264,23 @@
             }                
         }
         // print message if no matches were found
-        if(matches_found == 0){
+        if(matches_found == 0) {
             printf("No matches found\n");
         }
         // Close the output file
         close(output_fd);
     }
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 	// no output file before join
 	char* output_file = 0; 
     // ensure correct usage of command line args
-    if (argc == 4){
+    if (argc == 4) {
     	output_file = argv[3];
     	printf("Joining files '%s' and '%s' -> output to '%s'...\n", argv[1], argv[2], argv[3]);
-	}else if (argc == 3){
+	} else if (argc == 3) {
 		printf("Joining files '%s' and '%s'...\n", argv[1], argv[2]);
-	}else{
+	} else {
         printf("Usage: join file1.txt file2.txt [outputfile.txt]\n");
         exit(1);
     }
@@ -277,23 +289,38 @@ int main(int argc, char *argv[]){
     printf("Reading first file...");
     int count1 = read_file_lines(argv[1], file1_lines, 50);
     printf("Read %d lines from file1\n", count1);
-    if(count1 == 0){
+    if(count1 == 0) {
     	printf("ERROR: failed to read lines from %s\n", argv[1]);
     	exit(1);
+    } else if(count1 == -1) {
+        printf("ERROR: failed to retrive metadata from %s\n", argv[1]);
+        exit(1);
+    } else if(count1 == -2) {
+        printf("ERROR: %s is empty\n", argv[1]);
+        exit(1);
+    } else {
+         printf("File %s exists\n", argv[1]);
     }
-
+    
     printf("Reading second file...");
     int count2 = read_file_lines(argv[2], file2_lines, 50);
     printf("Read %d lines from file2\n", count2);
-    if(count2 == 0){
+    if(count2 == 0) {
     	printf("ERROR: failed to read lines from %s\n", argv[2]);
     	exit(1);
+    }else if(count1 == -1) {
+        printf("ERROR: failed to retrive metadata from %s\n", argv[2]);
+        exit(1);
+    }else if(count1 == -2) {
+        printf("ERROR: %s is empty\n", argv[2]);
+        exit(1);
     }
+    
     // join both files
     printf("joining both files\n");
     // call function that joins files into output file
     join_files(file1_lines, count1, file2_lines, count2, output_file);
-    if(output_file != 0){
+    if(output_file != 0) {
     	printf("Output saved to %s\n", output_file);
     }
     
