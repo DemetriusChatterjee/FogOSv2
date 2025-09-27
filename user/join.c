@@ -175,7 +175,7 @@
             	write(output_file, " ", 1);
             	write(output_file, rest2, strlen(rest2));
             	write(output_file, "\n", 1);
-        }
+            }
       }
     
     /**
@@ -189,12 +189,12 @@
 
         // Open the output file for writing (create it if it doesn't exist)
         if(output_file != 0){
-        // changes the value of output_fd to indicate we have a valid file
-        output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC); 	// open file with flags (create new file if it does not exist | 
-        														      	//	write access only | empty file if already exists)
-        if (output_fd < 0) {
-            printf("Error: Cannot open output file '%s'\n", output_file);
-            return;
+            // changes the value of output_fd to indicate we have a valid file
+            output_fd = open(output_file, O_CREATE | O_WRONLY | O_TRUNC); 	// open file with flags (create new file if it does not exist | 
+            														      	//	write access only | empty file if already exists)
+            if (output_fd < 0) {
+                printf("Error: Cannot open output file '%s'\n", output_file);
+                return;
             }
         }
 
@@ -268,8 +268,7 @@ int main(int argc, char *argv[]){
     	printf("Joining files '%s' and '%s' -> output to '%s'...\n", argv[1], argv[2], argv[3]);
 	}else if (argc == 3){
 		printf("Joining files '%s' and '%s'...\n", argv[1], argv[2]);
-	}
-    else{
+	}else{
         printf("Usage: join file1.txt file2.txt [outputfile.txt]\n");
         exit(1);
     }
@@ -286,7 +285,7 @@ int main(int argc, char *argv[]){
     printf("Reading second file...");
     int count2 = read_file_lines(argv[2], file2_lines, 50);
     printf("Read %d lines from file2\n", count2);
-        if(count2 == 0){
+    if(count2 == 0){
     	printf("ERROR: failed to read lines from %s\n", argv[2]);
     	exit(1);
     }
