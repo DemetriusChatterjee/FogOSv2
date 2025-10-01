@@ -40,11 +40,16 @@ Once in QEMU, the test data files are available in the filesystem:
 - `Fog_Emp.txt`, `Fog_Perf.txt` - Employee data
 - `empty.txt` - Empty test file
 
-### Run built-in test programs
-The system includes several test programs in `/user`:
-- `usertests` - Comprehensive system tests
-- `forktest` - Process creation tests
-- `grind` - Stress testing
+### Run join command
+You can test the join functionality with two input files:
+```bash
+join file1.txt file2.txt
+```
+
+You can also specify an output file:
+```bash
+join file1.txt file2.txt output.txt
+```
 
 ## Cleaning Up
 
@@ -63,6 +68,6 @@ This removes:
 
 - `kernel/` - Operating system kernel source code
 - `user/` - User-space programs and utilities
-- `testData/` - Original test data files (preserved during clean)
+- `tests/` - Original test data files (preserved during clean)
 - `mkfs/` - Filesystem creation utility
 - `Makefile` - Build configuration and targets
