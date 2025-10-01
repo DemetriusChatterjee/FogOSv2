@@ -144,18 +144,25 @@ UPROGS=\
 	$U/_dorphan\
 	$U/_join\
 
-fs.img: mkfs/mkfs README.md $(UPROGS) file1.txt file2.txt students.txt grades.txt products.txt prices.txt Fog_Emp.txt Fog_Perf.txt MC_Item.txt MC_Price.txt empty.txt
+TDIR = tests
+
+fs.img: mkfs/mkfs README.md $(UPROGS) $(TDIR)/file1.txt $(TDIR)/file2.txt $(TDIR)/students.txt $(TDIR)/grades.txt $(TDIR)/products.txt $(TDIR)/prices.txt $(TDIR)/Fog_Emp.txt $(TDIR)/Fog_Perf.txt $(TDIR)/MC_Item.txt $(TDIR)/MC_Price.txt $(TDIR)/empty.txt
+	cp $(TDIR)/*.txt .
 	mkfs/mkfs fs.img README.md $(UPROGS) file1.txt file2.txt students.txt grades.txt products.txt prices.txt Fog_Emp.txt Fog_Perf.txt MC_Item.txt MC_Price.txt empty.txt
 
 -include kernel/*.d user/*.d
 
 clean: 
-	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
+	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg file1.txt file2.txt students.txt grades.txt products.txt prices.txt Fog_Emp.txt Fog_Perf.txt MC_Item.txt MC_Price.txt empty.txt \
 	*/*.o */*.d */*.asm */*.sym \
 	$K/kernel fs.img \
 	mkfs/mkfs .gdbinit \
         $U/usys.S \
 	$(UPROGS)
+
+qemu-clean: check-qemu-version $K/kernel fs.img
+	$(QEMU) $(QEMUOPTS)
+	$(MAKE) clean
 
 # try to generate a unique GDB port
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
