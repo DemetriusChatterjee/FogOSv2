@@ -179,8 +179,11 @@ int read_file_lines(char* filename, char lines[][256], int max_count) {
  * "first word" "rest line file 1" "rest line file 2"
 */
 void print_joined_line(int output_file, char* field, char* rest1, char* rest2) {
-    printf("%s %s %s\n", field, rest1, rest2);
-
+    // Only print to console if NOT writing to a file
+    if (output_file < 0) {
+        printf("%s %s %s\n", field, rest1, rest2);
+    }
+    
     // check if there is a valid file descriptor
     if (output_file >= 0) {
         // Write to the file 
@@ -239,7 +242,7 @@ void join_files(char file1_lines[][256], int count1, char file2_lines[][256], in
             int m = 0;
 
             // string copy
-            while (m < 255 && file2_files[j][m] != '\0') {
+            while (m < 255 && file2_lines[j][m] != '\0') {
                 line2_copy[m] = file2_lines[j][m];
                 m++;
             }
