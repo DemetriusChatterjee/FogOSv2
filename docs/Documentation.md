@@ -14,7 +14,7 @@ make
 This will:
 - Compile the kernel from source files in the `kernel/` directory
 - Compile user programs from the `user/` directory
-- Copy test data files from `testData/` to the root directory
+- Copy test data files from `tests/` to the root directory
 - Create the filesystem image (`fs.img`) containing all programs and data files
 
 ## Running the Software
@@ -99,13 +99,13 @@ This removes:
 - Compiled object files (*.o)
 - Kernel binary and filesystem image
 - Temporary files
-- Test data files copied to root (preserves originals in `testData/`)
+- Test data files copied to root (preserves originals in `tests/`)
 - Note: `compile_flags.txt` in root is preserved
 
 ## Project Structure
 
 - `kernel/` - Operating system kernel source code
 - `user/` - User-space programs and utilities
-- `testData/` - Original test data files (preserved during clean)
+- `tests/` - Original test data files (preserved during clean)
 - `mkfs/` - Filesystem creation utility
 - `Makefile` - Build configuration and targets
